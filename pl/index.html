@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Polityka prywatności — Tokenly</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; line-height: 1.6; color: #20242c; background: #f6f7fb; }
+    .container { max-width: 820px; margin: 0 auto; padding: 44px 20px; background: #fff; min-height: 100vh; }
+    h1 { font-size: 2.35rem; line-height: 1.12; color: #1f4ed8; margin-bottom: 10px; }
+    h2 { color: #1f4ed8; margin: 30px 0 12px; font-size: 1.35rem; }
+    p, li { margin-bottom: 12px; }
+    ul { margin: 0 0 18px 24px; }
+    a { color: #1f4ed8; text-decoration: none; border-bottom: 1px solid #1f4ed8; }
+    .lang { margin: 16px 0 24px; padding-bottom: 16px; border-bottom: 1px solid #e6e8ef; color: #697082; }
+    .meta { color: #697082; }
+    footer { margin-top: 38px; padding-top: 18px; border-top: 1px solid #e6e8ef; color: #697082; font-size: .92rem; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>Tokenly — Polityka prywatności</h1>
+    <p class="meta"><strong>Ostatnia aktualizacja:</strong> 12 lipca 2026</p>
+    <p class="lang"><a href="../en/">English version</a> · <a href="terms.html">Warunki korzystania</a></p>
+
+    <h2>1. Informacje ogólne</h2>
+    <p><strong>Administrator danych:</strong> Maciej Siemiński — twórca aplikacji Tokenly. <strong>Kontakt:</strong> <a href="mailto:mail@macsiem.dev">mail@macsiem.dev</a>.</p>
+    <p>Tokenly to pulpit zużycia subskrypcji AI, dostępny jako aplikacja desktopowa (macOS, Windows) oraz towarzysząca aplikacja iOS. Pokazuje, ile limitów Twoich planów AI (np. Claude lub ChatGPT) zostało wykorzystane. Tokenly działa w modelu local-first: Twoje dane dostępowe i dane o zużyciu pozostają na Twoich urządzeniach.</p>
+
+    <h2>2. Dane dostępowe do usług AI</h2>
+    <p>Aby odczytać zużycie, Tokenly potrzebuje danych dostępowych (np. tokenów sesji lub kluczy API) do usług AI, które zdecydujesz się podłączyć. Te dane:</p>
+    <ul>
+      <li>podajesz samodzielnie i są przechowywane wyłącznie na Twoim urządzeniu, w bezpiecznym magazynie systemu (pęk kluczy macOS/iOS lub magazyn poświadczeń Windows);</li>
+      <li>służą wyłącznie do odpytywania endpointów zużycia danego dostawcy bezpośrednio z Twojego urządzenia;</li>
+      <li>nigdy nie są przekazywane do nas — nie prowadzimy żadnego serwera, który odbiera, przechowuje lub pośredniczy w przesyłaniu Twoich danych dostępowych czy danych o zużyciu.</li>
+    </ul>
+
+    <h2>3. Dane o zużyciu</h2>
+    <p>Statystyki zużycia pobierane od dostawców AI (typ planu, limity, konsumpcja, czasy resetu) są przetwarzane i buforowane lokalnie na Twoim urządzeniu. Nie mamy do nich dostępu.</p>
+
+    <h2>4. Synchronizacja między urządzeniami</h2>
+    <p>Jeśli sparujesz aplikację iOS z aplikacją desktopową, dane o zużyciu są synchronizowane bezpośrednio między Twoimi urządzeniami z szyfrowaniem end-to-end. Klucze parowania są przechowywane w systemowym pęku kluczy. Nie możemy odczytać synchronizowanych treści.</p>
+
+    <h2>5. Diagnostyka awarii</h2>
+    <p>Tokenly może korzystać z Sentry do raportowania awarii, gdy dana kompilacja jest skonfigurowana z Sentry DSN. Diagnostyka może obejmować wersję aplikacji, wersję systemu, model urządzenia, stack trace i breadcrumbs nawigacji. Dane dostępowe, tokeny ani wartości zużycia nie są dołączane do raportów.</p>
+
+    <h2>6. Subskrypcje i płatności</h2>
+    <p>Opcjonalne Tokenly Premium jest oferowane jako subskrypcja w aplikacji. Na iOS płatność, dane rozliczeniowe i zarządzanie subskrypcją obsługuje w całości Apple w ramach Twojego konta Apple; nie otrzymujemy Twoich danych płatniczych. Zobacz <a href="terms.html">Warunki korzystania</a>.</p>
+
+    <h2>7. Reklamy</h2>
+    <p>Tokenly nie zawiera reklam ani SDK reklamowych.</p>
+
+    <h2>8. Podstawy prawne (RODO)</h2>
+    <ul>
+      <li><strong>Wykonanie usługi (art. 6 ust. 1 lit. b RODO)</strong> — lokalne przetwarzanie danych dostępowych i danych o zużyciu niezbędnych do wyświetlania pulpitów.</li>
+      <li><strong>Uzasadniony interes (art. 6 ust. 1 lit. f RODO)</strong> — diagnostyka awarii przez Sentry w celu utrzymania stabilności aplikacji.</li>
+    </ul>
+
+    <h2>9. Okres przechowywania</h2>
+    <ul>
+      <li>Dane dostępowe i zbuforowane dane o zużyciu pozostają na Twoim urządzeniu do czasu odłączenia dostawcy, usunięcia danych aplikacji lub jej odinstalowania.</li>
+      <li>Raporty awarii w Sentry są przechowywane przez 90 dni (domyślnie), po czym są automatycznie usuwane.</li>
+    </ul>
+
+    <h2>10. Twoje prawa</h2>
+    <p>Na gruncie RODO masz prawo dostępu do danych, ich sprostowania, usunięcia, ograniczenia przetwarzania, sprzeciwu oraz przenoszenia danych. Ponieważ Tokenly przechowuje dane na Twoich urządzeniach, możesz je usunąć bezpośrednio — odłączając dostawców lub odinstalowując aplikację. W pozostałych sprawach (np. dane o awariach) napisz: <a href="mailto:mail@macsiem.dev">mail@macsiem.dev</a>.</p>
+    <p>Masz też prawo wniesienia skargi do organu nadzorczego — w Polsce jest to Prezes Urzędu Ochrony Danych Osobowych (UODO), ul. Stawki 2, 00-193 Warszawa, <a href="https://uodo.gov.pl/">uodo.gov.pl</a>.</p>
+
+    <h2>11. Dzieci</h2>
+    <p>Tokenly nie jest kierowane do dzieci i świadomie nie zbieramy danych osobowych dzieci.</p>
+
+    <h2>12. Transfery międzynarodowe</h2>
+    <p>Twoje dane dostępowe i dane o zużyciu nie opuszczają Twoich urządzeń przez żaden serwer MacSiem. Gdy Twoje urządzenie odpytuje dostawcę AI, ruch trafia bezpośrednio do tego dostawcy zgodnie z jego polityką prywatności. Dane o awariach przetwarzane przez Sentry mogą być przekazywane poza Europejski Obszar Gospodarczy z zabezpieczeniami wymaganymi przez RODO (standardowe klauzule umowne lub decyzja o adekwatności).</p>
+
+    <h2>13. Czego nie zbieramy</h2>
+    <ul>
+      <li>Nie zbieramy imienia, nazwiska, adresu e-mail ani danych logowania.</li>
+      <li>Nie odbieramy, nie przechowujemy i nie pośredniczymy w przesyłaniu Twoich danych o zużyciu AI.</li>
+      <li>Nie zbieramy danych o lokalizacji.</li>
+      <li>Nie wyświetlamy reklam i nie używamy identyfikatorów reklamowych.</li>
+      <li>Nie sprzedajemy danych osobowych.</li>
+    </ul>
+
+    <h2>14. Zmiany i kontakt</h2>
+    <p>Możemy aktualizować tę politykę wraz ze zmianami aplikacji lub przepisów; aktualna wersja jest zawsze dostępna pod kanonicznym adresem poniżej. Pytania dotyczące prywatności: <a href="mailto:mail@macsiem.dev">mail@macsiem.dev</a>.</p>
+
+    <footer>
+      <p>Adres kanoniczny: <a href="https://macsiem.github.io/tokenly-privacy/">https://macsiem.github.io/tokenly-privacy/</a></p>
+    </footer>
+  </main>
+</body>
+</html>
