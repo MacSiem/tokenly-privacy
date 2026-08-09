@@ -21,7 +21,7 @@
 <body>
   <main class="container">
     <h1>Tokenly — Privacy Policy</h1>
-    <p class="meta"><strong>Last updated:</strong> 12 July 2026</p>
+    <p class="meta"><strong>Last updated:</strong> 9 August 2026</p>
     <p class="lang"><a href="../pl/">Polska wersja</a> · <a href="terms.html">Terms of Use</a></p>
 
     <h2>1. Overview</h2>
@@ -33,14 +33,16 @@
     <ul>
       <li>are provided by you and stored only on your device, in the operating system's secure storage (macOS Keychain, iOS Keychain, or the platform credential store on Windows);</li>
       <li>are used exclusively to query the given provider's usage endpoints directly from your device;</li>
-      <li>are never transmitted to us — we do not operate any server that receives, stores, or proxies your credentials or usage data.</li>
+      <li>are never transmitted to us — no Tokenly server ever receives, stores, or proxies your credentials.</li>
     </ul>
 
     <h2>3. Usage Data</h2>
     <p>Usage statistics fetched from your AI providers (plan type, limits, consumption, reset times) are processed and cached locally on your device. We have no access to them.</p>
 
-    <h2>4. Device-to-Device Sync</h2>
-    <p>If you pair the iOS app with your desktop app, usage data is synchronized directly between your devices with end-to-end encryption. Pairing keys are stored in the system keychain. We cannot read the synchronized content.</p>
+    <h2>4. Device-to-Device Sync and the Relay</h2>
+    <p>If you pair a mobile app with your desktop app, usage data on the same network is synchronized directly between your devices with end-to-end encryption. Pairing keys are stored in the system keychain. We cannot read the synchronized content.</p>
+    <p>So that a paired phone also works away from your home network, the desktop additionally uploads an encrypted snapshot to the Tokenly relay (<code>trial.tokenly.macsiem.dev</code>, a Cloudflare Workers service). This off-LAN sync is <strong>on by default</strong> and can be turned off in Settings (LAN-only mode). The snapshot is AES-GCM encrypted with a key derived from your pairing secret; that key never leaves your paired devices, so <strong>the relay cannot decrypt your data</strong>.</p>
+    <p>What the relay does receive and store: the encrypted snapshot, an opaque randomly-generated account identifier, an opaque device fingerprint, a verifier of the per-pairing authorization key (which cannot decrypt anything), your push notification token (APNs/FCM) if the mobile app registers for sync wake-ups, and ordinary connection metadata such as IP address, sizes and timestamps. Push payloads contain only a generic "new data available" signal — never usage values or credentials.</p>
 
     <h2>5. Crash Diagnostics</h2>
     <p>Tokenly can use Sentry for crash reporting when a build is configured with a Sentry DSN. Crash diagnostics may include app version, OS version, device model, stack traces, and navigation breadcrumbs. Credentials, tokens, and usage values are not attached to crash reports.</p>
@@ -57,13 +59,15 @@
 
     <h2>8. Legal Bases (GDPR)</h2>
     <ul>
-      <li><strong>Performance of the service (Art. 6(1)(b) GDPR)</strong> — local processing of the credentials and usage data required to show your dashboards.</li>
+      <li><strong>Performance of the service (Art. 6(1)(b) GDPR)</strong> — local processing of the credentials and usage data required to show your dashboards, and operation of the encrypted relay for cross-network sync of paired devices.</li>
       <li><strong>Legitimate interest (Art. 6(1)(f) GDPR)</strong> — crash diagnostics via Sentry to keep the app stable.</li>
     </ul>
 
     <h2>9. Data Retention</h2>
     <ul>
       <li>Credentials and cached usage data remain on your device until you disconnect a provider, delete app data, or uninstall the app.</li>
+      <li>The relay keeps only the latest encrypted snapshot per pairing; each upload replaces the previous one. The snapshot, the authorization verifier and the account record remain until you request deletion (see below).</li>
+      <li>Relay push tokens are refreshed by the platform and expire no later than 180 days after their last successful registration; they are deleted together with the relay record.</li>
       <li>Sentry crash reports are retained for 90 days (Sentry default), then deleted automatically.</li>
     </ul>
 
@@ -76,6 +80,10 @@
       <li><strong>Crash diagnostics (Sentry):</strong> we cannot look you up, because crash reports carry no user
       identifier. If you want them erased anyway, email <a href="mailto:mail@macsiem.dev">mail@macsiem.dev</a> from
       the address you contact us on and we will have them deleted.</li>
+      <li><strong>Relay data (encrypted snapshot, account record, push token):</strong> email
+      <a href="mailto:mail@macsiem.dev">mail@macsiem.dev</a> with the opaque account identifier shown in the app
+      and we will delete the server-side record. Turning the relay off in Settings stops any further uploads;
+      uninstalling alone does not contact the relay.</li>
     </ul>
     <p>To request deletion of anything else, or to exercise any other right, write to
     <a href="mailto:mail@macsiem.dev">mail@macsiem.dev</a>. We answer within 30 days.</p>
@@ -86,12 +94,12 @@
     <p>Tokenly is not directed at children and we do not knowingly collect personal data from children.</p>
 
     <h2>12. International Transfers</h2>
-    <p>Your credentials and usage data do not leave your devices through any MacSiem server. When your device queries an AI provider, that traffic goes directly to the provider under its own privacy policy. Crash data processed by Sentry may be transferred outside the European Economic Area under GDPR safeguards such as Standard Contractual Clauses or an adequacy decision.</p>
+    <p>Your credentials never leave your devices through any MacSiem server. When your device queries an AI provider, that traffic goes directly to the provider under its own privacy policy. The encrypted relay runs on Cloudflare Workers with storage located in the European Union; as a global network, Cloudflare may process connection metadata outside the European Economic Area under GDPR safeguards such as Standard Contractual Clauses. Crash data processed by Sentry may be transferred outside the EEA under the same kinds of safeguards.</p>
 
     <h2>13. What We Do Not Collect</h2>
     <ul>
       <li>We do not collect your name, email address, or account credentials.</li>
-      <li>We do not receive, store, or proxy your AI usage data.</li>
+      <li>We never see your AI usage data in readable form — the relay stores only an encrypted snapshot we cannot decrypt.</li>
       <li>We do not collect location data.</li>
       <li>We never show ads on any platform or tier, and we do not collect or use an advertising identifier — see section 7.</li>
       <li>We do not sell personal information.</li>

@@ -21,7 +21,7 @@
 <body>
   <main class="container">
     <h1>Tokenly — Polityka prywatności</h1>
-    <p class="meta"><strong>Ostatnia aktualizacja:</strong> 12 lipca 2026</p>
+    <p class="meta"><strong>Ostatnia aktualizacja:</strong> 9 sierpnia 2026</p>
     <p class="lang"><a href="../en/">English version</a> · <a href="terms.html">Warunki korzystania</a></p>
 
     <h2>1. Informacje ogólne</h2>
@@ -33,14 +33,16 @@
     <ul>
       <li>podajesz samodzielnie i są przechowywane wyłącznie na Twoim urządzeniu, w bezpiecznym magazynie systemu (pęk kluczy macOS/iOS lub magazyn poświadczeń Windows);</li>
       <li>służą wyłącznie do odpytywania endpointów zużycia danego dostawcy bezpośrednio z Twojego urządzenia;</li>
-      <li>nigdy nie są przekazywane do nas — nie prowadzimy żadnego serwera, który odbiera, przechowuje lub pośredniczy w przesyłaniu Twoich danych dostępowych czy danych o zużyciu.</li>
+      <li>nigdy nie są przekazywane do nas — żaden serwer Tokenly nie odbiera, nie przechowuje ani nie pośredniczy w przesyłaniu Twoich danych dostępowych.</li>
     </ul>
 
     <h2>3. Dane o zużyciu</h2>
     <p>Statystyki zużycia pobierane od dostawców AI (typ planu, limity, konsumpcja, czasy resetu) są przetwarzane i buforowane lokalnie na Twoim urządzeniu. Nie mamy do nich dostępu.</p>
 
-    <h2>4. Synchronizacja między urządzeniami</h2>
-    <p>Jeśli sparujesz aplikację iOS z aplikacją desktopową, dane o zużyciu są synchronizowane bezpośrednio między Twoimi urządzeniami z szyfrowaniem end-to-end. Klucze parowania są przechowywane w systemowym pęku kluczy. Nie możemy odczytać synchronizowanych treści.</p>
+    <h2>4. Synchronizacja między urządzeniami i relay</h2>
+    <p>Jeśli sparujesz aplikację mobilną z aplikacją desktopową, dane o zużyciu w tej samej sieci są synchronizowane bezpośrednio między Twoimi urządzeniami z szyfrowaniem end-to-end. Klucze parowania są przechowywane w systemowym pęku kluczy. Nie możemy odczytać synchronizowanych treści.</p>
+    <p>Aby sparowany telefon działał także poza siecią domową, komputer dodatkowo wysyła zaszyfrowany snapshot do relaya Tokenly (<code>trial.tokenly.macsiem.dev</code>, usługa Cloudflare Workers). Ta synchronizacja poza LAN jest <strong>domyślnie włączona</strong> i można ją wyłączyć w Ustawieniach (tryb tylko-LAN). Snapshot jest szyfrowany AES-GCM kluczem wyprowadzanym z sekretu parowania; ten klucz nigdy nie opuszcza sparowanych urządzeń, więc <strong>relay nie może odszyfrować Twoich danych</strong>.</p>
+    <p>Co relay otrzymuje i przechowuje: zaszyfrowany snapshot, nieprzejrzysty losowo wygenerowany identyfikator konta, nieprzejrzysty odcisk urządzenia, weryfikator klucza autoryzacyjnego danego parowania (nie pozwala niczego odszyfrować), token powiadomień push (APNs/FCM), jeśli aplikacja mobilna rejestruje się po wybudzenia synchronizacji, oraz zwykłe metadane połączenia, takie jak adres IP, rozmiary i znaczniki czasu. Powiadomienia push zawierają wyłącznie ogólny sygnał „są nowe dane" — nigdy wartości zużycia ani danych dostępowych.</p>
 
     <h2>5. Diagnostyka awarii</h2>
     <p>Tokenly może korzystać z Sentry do raportowania awarii, gdy dana kompilacja jest skonfigurowana z Sentry DSN. Diagnostyka może obejmować wersję aplikacji, wersję systemu, model urządzenia, stack trace i breadcrumbs nawigacji. Dane dostępowe, tokeny ani wartości zużycia nie są dołączane do raportów.</p>
@@ -58,13 +60,15 @@
 
     <h2>8. Podstawy prawne (RODO)</h2>
     <ul>
-      <li><strong>Wykonanie usługi (art. 6 ust. 1 lit. b RODO)</strong> — lokalne przetwarzanie danych dostępowych i danych o zużyciu niezbędnych do wyświetlania pulpitów.</li>
+      <li><strong>Wykonanie usługi (art. 6 ust. 1 lit. b RODO)</strong> — lokalne przetwarzanie danych dostępowych i danych o zużyciu niezbędnych do wyświetlania pulpitów oraz działanie zaszyfrowanego relaya do synchronizacji sparowanych urządzeń między sieciami.</li>
       <li><strong>Uzasadniony interes (art. 6 ust. 1 lit. f RODO)</strong> — diagnostyka awarii przez Sentry w celu utrzymania stabilności aplikacji.</li>
     </ul>
 
     <h2>9. Okres przechowywania</h2>
     <ul>
       <li>Dane dostępowe i zbuforowane dane o zużyciu pozostają na Twoim urządzeniu do czasu odłączenia dostawcy, usunięcia danych aplikacji lub jej odinstalowania.</li>
+      <li>Relay przechowuje wyłącznie najnowszy zaszyfrowany snapshot danego parowania; każde wysłanie zastępuje poprzedni. Snapshot, weryfikator autoryzacji i rekord konta pozostają do czasu żądania usunięcia (patrz niżej).</li>
+      <li>Tokeny push relaya są odświeżane przez platformę i wygasają najpóźniej 180 dni po ostatniej udanej rejestracji; są usuwane razem z rekordem relaya.</li>
       <li>Raporty awarii w Sentry są przechowywane przez 90 dni (domyślnie), po czym są automatycznie usuwane.</li>
     </ul>
 
@@ -78,6 +82,10 @@
       <li><strong>Dane o awariach (Sentry):</strong> nie umiemy Cię w nich odnaleźć, bo raporty nie zawierają
       identyfikatora użytkownika. Jeśli mimo to chcesz je usunąć, napisz z tego adresu, z którego się z nami
       kontaktujesz, na <a href="mailto:mail@macsiem.dev">mail@macsiem.dev</a>, a zlecimy ich skasowanie.</li>
+      <li><strong>Dane relaya (zaszyfrowany snapshot, rekord konta, token push):</strong> napisz na
+      <a href="mailto:mail@macsiem.dev">mail@macsiem.dev</a>, podając nieprzejrzysty identyfikator konta widoczny
+      w aplikacji, a usuniemy rekord po stronie serwera. Wyłączenie relaya w Ustawieniach zatrzymuje dalsze
+      wysyłki; samo odinstalowanie aplikacji nie kontaktuje się z relayem.</li>
     </ul>
     <p>Żeby zażądać usunięcia czegokolwiek innego albo skorzystać z innego prawa, napisz na
     <a href="mailto:mail@macsiem.dev">mail@macsiem.dev</a>. Odpowiadamy w ciągu 30 dni.</p>
@@ -88,12 +96,12 @@
     <p>Tokenly nie jest kierowane do dzieci i świadomie nie zbieramy danych osobowych dzieci.</p>
 
     <h2>12. Transfery międzynarodowe</h2>
-    <p>Twoje dane dostępowe i dane o zużyciu nie opuszczają Twoich urządzeń przez żaden serwer MacSiem. Gdy Twoje urządzenie odpytuje dostawcę AI, ruch trafia bezpośrednio do tego dostawcy zgodnie z jego polityką prywatności. Dane o awariach przetwarzane przez Sentry mogą być przekazywane poza Europejski Obszar Gospodarczy z zabezpieczeniami wymaganymi przez RODO (standardowe klauzule umowne lub decyzja o adekwatności).</p>
+    <p>Twoje dane dostępowe nigdy nie opuszczają Twoich urządzeń przez żaden serwer MacSiem. Gdy Twoje urządzenie odpytuje dostawcę AI, ruch trafia bezpośrednio do tego dostawcy zgodnie z jego polityką prywatności. Zaszyfrowany relay działa na Cloudflare Workers z magazynem zlokalizowanym w Unii Europejskiej; jako sieć globalna Cloudflare może przetwarzać metadane połączeń poza Europejskim Obszarem Gospodarczym z zabezpieczeniami wymaganymi przez RODO (np. standardowe klauzule umowne). Dane o awariach przetwarzane przez Sentry mogą być przekazywane poza EOG na tych samych zasadach.</p>
 
     <h2>13. Czego nie zbieramy</h2>
     <ul>
       <li>Nie zbieramy imienia, nazwiska, adresu e-mail ani danych logowania.</li>
-      <li>Nie odbieramy, nie przechowujemy i nie pośredniczymy w przesyłaniu Twoich danych o zużyciu AI.</li>
+      <li>Nigdy nie widzimy Twoich danych o zużyciu AI w czytelnej formie — relay przechowuje wyłącznie zaszyfrowany snapshot, którego nie umiemy odszyfrować.</li>
       <li>Nie zbieramy danych o lokalizacji.</li>
       <li>Nigdy nie pokazujemy reklam na żadnej platformie ani w żadnym wariancie i nie zbieramy ani nie używamy identyfikatora reklamowego — patrz sekcja 7.</li>
       <li>Nie sprzedajemy danych osobowych.</li>
