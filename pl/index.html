@@ -42,7 +42,7 @@
     <h2>4. Synchronizacja między urządzeniami i relay</h2>
     <p>Jeśli sparujesz aplikację mobilną z aplikacją desktopową, dane o zużyciu w tej samej sieci są synchronizowane bezpośrednio między Twoimi urządzeniami z szyfrowaniem end-to-end. Klucze parowania są przechowywane w systemowym pęku kluczy. Nie możemy odczytać synchronizowanych treści.</p>
     <p>Aby sparowany telefon działał także poza siecią domową, komputer dodatkowo wysyła zaszyfrowany snapshot do relaya Tokenly (<code>trial.tokenly.macsiem.dev</code>, usługa Cloudflare Workers). Ta synchronizacja poza LAN jest <strong>domyślnie włączona</strong> i można ją wyłączyć w Ustawieniach (tryb tylko-LAN). Snapshot jest szyfrowany AES-GCM kluczem wyprowadzanym z sekretu parowania; ten klucz nigdy nie opuszcza sparowanych urządzeń, więc <strong>relay nie może odszyfrować Twoich danych</strong>.</p>
-    <p>Co relay otrzymuje i przechowuje: zaszyfrowany snapshot, nieprzejrzysty losowo wygenerowany identyfikator konta, nieprzejrzysty odcisk urządzenia, weryfikator klucza autoryzacyjnego danego parowania (nie pozwala niczego odszyfrować), token powiadomień push (APNs/FCM), jeśli aplikacja mobilna rejestruje się po wybudzenia synchronizacji, oraz zwykłe metadane połączenia, takie jak adres IP, rozmiary i znaczniki czasu. Powiadomienia push zawierają wyłącznie ogólny sygnał „są nowe dane" — nigdy wartości zużycia ani danych dostępowych.</p>
+    <p>Co relay otrzymuje i przechowuje: zaszyfrowany snapshot, nieprzejrzysty losowo wygenerowany identyfikator konta, nieprzejrzysty odcisk urządzenia, poświadczenie autoryzacyjne danego parowania (uwierzytelnia wysyłki i odczyty tego parowania, nie pozwala niczego odszyfrować), token powiadomień push (APNs/FCM), jeśli aplikacja mobilna rejestruje się po wybudzenia synchronizacji, oraz zwykłe metadane połączenia, takie jak adres IP, rozmiary i znaczniki czasu. Powiadomienia push zawierają wyłącznie ogólny sygnał „są nowe dane" — nigdy wartości zużycia ani danych dostępowych.</p>
 
     <h2>5. Diagnostyka awarii</h2>
     <p>Tokenly może korzystać z Sentry do raportowania awarii, gdy dana kompilacja jest skonfigurowana z Sentry DSN. Diagnostyka może obejmować wersję aplikacji, wersję systemu, model urządzenia, stack trace i breadcrumbs nawigacji. Dane dostępowe, tokeny ani wartości zużycia nie są dołączane do raportów.</p>
@@ -67,7 +67,7 @@
     <h2>9. Okres przechowywania</h2>
     <ul>
       <li>Dane dostępowe i zbuforowane dane o zużyciu pozostają na Twoim urządzeniu do czasu odłączenia dostawcy, usunięcia danych aplikacji lub jej odinstalowania.</li>
-      <li>Relay przechowuje wyłącznie najnowszy zaszyfrowany snapshot danego parowania; każde wysłanie zastępuje poprzedni. Snapshot, weryfikator autoryzacji i rekord konta pozostają do czasu żądania usunięcia (patrz niżej).</li>
+      <li>Relay przechowuje wyłącznie najnowszy zaszyfrowany snapshot danego parowania; każde wysłanie zastępuje poprzedni. Snapshot, poświadczenie autoryzacyjne i rekord konta pozostają do czasu żądania usunięcia (patrz niżej).</li>
       <li>Tokeny push relaya są odświeżane przez platformę i wygasają najpóźniej 180 dni po ostatniej udanej rejestracji; są usuwane razem z rekordem relaya.</li>
       <li>Raporty awarii w Sentry są przechowywane przez 90 dni (domyślnie), po czym są automatycznie usuwane.</li>
     </ul>

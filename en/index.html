@@ -42,7 +42,7 @@
     <h2>4. Device-to-Device Sync and the Relay</h2>
     <p>If you pair a mobile app with your desktop app, usage data on the same network is synchronized directly between your devices with end-to-end encryption. Pairing keys are stored in the system keychain. We cannot read the synchronized content.</p>
     <p>So that a paired phone also works away from your home network, the desktop additionally uploads an encrypted snapshot to the Tokenly relay (<code>trial.tokenly.macsiem.dev</code>, a Cloudflare Workers service). This off-LAN sync is <strong>on by default</strong> and can be turned off in Settings (LAN-only mode). The snapshot is AES-GCM encrypted with a key derived from your pairing secret; that key never leaves your paired devices, so <strong>the relay cannot decrypt your data</strong>.</p>
-    <p>What the relay does receive and store: the encrypted snapshot, an opaque randomly-generated account identifier, an opaque device fingerprint, a verifier of the per-pairing authorization key (which cannot decrypt anything), your push notification token (APNs/FCM) if the mobile app registers for sync wake-ups, and ordinary connection metadata such as IP address, sizes and timestamps. Push payloads contain only a generic "new data available" signal — never usage values or credentials.</p>
+    <p>What the relay does receive and store: the encrypted snapshot, an opaque randomly-generated account identifier, an opaque device fingerprint, the per-pairing authorization credential (it authenticates this pairing's uploads and reads and cannot decrypt anything), your push notification token (APNs/FCM) if the mobile app registers for sync wake-ups, and ordinary connection metadata such as IP address, sizes and timestamps. Push payloads contain only a generic "new data available" signal — never usage values or credentials.</p>
 
     <h2>5. Crash Diagnostics</h2>
     <p>Tokenly can use Sentry for crash reporting when a build is configured with a Sentry DSN. Crash diagnostics may include app version, OS version, device model, stack traces, and navigation breadcrumbs. Credentials, tokens, and usage values are not attached to crash reports.</p>
@@ -66,7 +66,7 @@
     <h2>9. Data Retention</h2>
     <ul>
       <li>Credentials and cached usage data remain on your device until you disconnect a provider, delete app data, or uninstall the app.</li>
-      <li>The relay keeps only the latest encrypted snapshot per pairing; each upload replaces the previous one. The snapshot, the authorization verifier and the account record remain until you request deletion (see below).</li>
+      <li>The relay keeps only the latest encrypted snapshot per pairing; each upload replaces the previous one. The snapshot, the authorization credential and the account record remain until you request deletion (see below).</li>
       <li>Relay push tokens are refreshed by the platform and expire no later than 180 days after their last successful registration; they are deleted together with the relay record.</li>
       <li>Sentry crash reports are retained for 90 days (Sentry default), then deleted automatically.</li>
     </ul>
