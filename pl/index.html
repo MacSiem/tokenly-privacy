@@ -37,7 +37,7 @@
     </ul>
 
     <h2>3. Dane o zużyciu</h2>
-    <p>Statystyki zużycia pobierane od dostawców AI (typ planu, limity, konsumpcja, czasy resetu) są przetwarzane i buforowane lokalnie na Twoim urządzeniu. Nie mamy do nich dostępu.</p>
+    <p>Statystyki zużycia pobierane od dostawców AI (typ planu, limity, konsumpcja, czasy resetu, zapasowe resety limitów i daty ich wygaśnięcia) są przetwarzane i buforowane lokalnie na Twoim urządzeniu. Nie mamy do nich dostępu.</p>
 
     <h2>4. Synchronizacja między urządzeniami i relay</h2>
     <p>Jeśli sparujesz aplikację mobilną z aplikacją desktopową, dane o zużyciu w tej samej sieci są synchronizowane bezpośrednio między Twoimi urządzeniami z szyfrowaniem end-to-end. Klucze parowania są przechowywane w systemowym pęku kluczy. Nie możemy odczytać synchronizowanych treści.</p>
@@ -45,7 +45,7 @@
     <p>Co relay otrzymuje i przechowuje: zaszyfrowany snapshot, nieprzejrzysty losowo wygenerowany identyfikator konta, nieprzejrzysty odcisk urządzenia, poświadczenie autoryzacyjne danego parowania (uwierzytelnia wysyłki i odczyty tego parowania, nie pozwala niczego odszyfrować), token powiadomień push (APNs/FCM), jeśli aplikacja mobilna rejestruje się po wybudzenia synchronizacji, oraz zwykłe metadane połączenia, takie jak adres IP, rozmiary i znaczniki czasu. Powiadomienia push zawierają wyłącznie ogólny sygnał „są nowe dane" — nigdy wartości zużycia ani danych dostępowych. Aby wykrywać ciche awarie doręczeń, relay przechowuje też liczniki doręczeń dla konta (platforma, rodzaj wybudzenia i wynik, np. „przyjęte przez Apple/Google” albo „push nieskonfigurowany”) oraz czas ostatniego udanego doręczenia na daną platformę. Nie zawierają tokenów ani treści, odczytać je mogą tylko sparowane urządzenia i są usuwane 90 dni po ostatniej aktualizacji.</p>
 
     <h2>5. Diagnostyka awarii</h2>
-    <p>Tokenly może korzystać z Sentry do raportowania awarii, gdy dana kompilacja jest skonfigurowana z Sentry DSN. Diagnostyka może obejmować wersję aplikacji, wersję systemu, model urządzenia, stack trace i breadcrumbs nawigacji. Dane dostępowe, tokeny ani wartości zużycia nie są dołączane do raportów.</p>
+    <p>Tokenly może korzystać z Sentry do raportowania awarii, gdy dana kompilacja jest skonfigurowana z Sentry DSN. Diagnostyka może obejmować wersję aplikacji, wersję systemu, model urządzenia, stack trace i breadcrumbs nawigacji; na urządzeniach Apple także diagnostykę zawieszeń i wydajności dostarczaną przez system (MetricKit). Aplikacje wysyłają też anonimowe zdarzenia początku i końca sesji, abyśmy mogli mierzyć, ile sesji kończy się bez awarii. Dane dostępowe, tokeny ani wartości zużycia nie są dołączane, a żaden identyfikator użytkownika nie jest ustawiany.</p>
 
     <h2>6. Subskrypcje i płatności</h2>
     <p>Opcjonalne Tokenly Premium jest oferowane jako subskrypcja w aplikacji. Na iOS płatność, dane rozliczeniowe i zarządzanie subskrypcją obsługuje w całości Apple w ramach Twojego konta Apple; nie otrzymujemy Twoich danych płatniczych. Zobacz <a href="terms.html">Warunki korzystania</a>.</p>
@@ -67,7 +67,7 @@
     <h2>9. Okres przechowywania</h2>
     <ul>
       <li>Dane dostępowe i zbuforowane dane o zużyciu pozostają na Twoim urządzeniu do czasu odłączenia dostawcy, usunięcia danych aplikacji lub jej odinstalowania.</li>
-      <li>Relay przechowuje wyłącznie najnowszy zaszyfrowany snapshot danego parowania; każde wysłanie zastępuje poprzedni. Snapshot, poświadczenie autoryzacyjne i rekord konta pozostają do czasu żądania usunięcia (patrz niżej).</li>
+      <li>Relay przechowuje wyłącznie najnowszy zaszyfrowany snapshot danego parowania; każde wysłanie zastępuje poprzedni. Gdy desktop nie wysyła danych przez 90 dni, snapshot i rekord konta są usuwane automatycznie, a poświadczenie autoryzacyjne w ciągu 97 dni; możesz też zażądać wcześniejszego usunięcia (patrz niżej). Cloudflare przechowuje logi żądań (adres IP, czas, nieprzejrzysty identyfikator konta) do 7 dni.</li>
       <li>Tokeny push relaya są odświeżane przez platformę i wygasają najpóźniej 180 dni po ostatniej udanej rejestracji; są usuwane razem z rekordem relaya.</li>
       <li>Raporty awarii w Sentry są przechowywane przez 90 dni (domyślnie), po czym są automatycznie usuwane.</li>
     </ul>
@@ -84,7 +84,7 @@
       kontaktujesz, na <a href="mailto:mail@macsiem.dev">mail@macsiem.dev</a>, a zlecimy ich skasowanie.</li>
       <li><strong>Dane relaya (zaszyfrowany snapshot, rekord konta, token push):</strong> napisz na
       <a href="mailto:mail@macsiem.dev">mail@macsiem.dev</a>, podając nieprzejrzysty identyfikator konta widoczny
-      w aplikacji, a usuniemy rekord po stronie serwera. Wyłączenie relaya w Ustawieniach zatrzymuje dalsze
+      w aplikacji, a usuniemy rekord po stronie serwera. Bez nowych wysyłek jest on usuwany automatycznie po 90 dniach. Wyłączenie relaya w Ustawieniach zatrzymuje dalsze
       wysyłki; samo odinstalowanie aplikacji nie kontaktuje się z relayem.</li>
     </ul>
     <p>Żeby zażądać usunięcia czegokolwiek innego albo skorzystać z innego prawa, napisz na
@@ -96,7 +96,7 @@
     <p>Tokenly nie jest kierowane do dzieci i świadomie nie zbieramy danych osobowych dzieci.</p>
 
     <h2>12. Transfery międzynarodowe</h2>
-    <p>Twoje dane dostępowe nigdy nie opuszczają Twoich urządzeń przez żaden serwer MacSiem. Gdy Twoje urządzenie odpytuje dostawcę AI, ruch trafia bezpośrednio do tego dostawcy zgodnie z jego polityką prywatności. Zaszyfrowany relay działa na Cloudflare Workers z magazynem zlokalizowanym w Unii Europejskiej; jako sieć globalna Cloudflare może przetwarzać metadane połączeń poza Europejskim Obszarem Gospodarczym z zabezpieczeniami wymaganymi przez RODO (np. standardowe klauzule umowne). Dane o awariach przetwarzane przez Sentry mogą być przekazywane poza EOG na tych samych zasadach.</p>
+    <p>Twoje dane dostępowe nigdy nie opuszczają Twoich urządzeń przez żaden serwer MacSiem. Gdy Twoje urządzenie odpytuje dostawcę AI, ruch trafia bezpośrednio do tego dostawcy zgodnie z jego polityką prywatności. Zaszyfrowany relay działa na Cloudflare Workers. Zaszyfrowane snapshoty są przechowywane w Cloudflare R2 w Europie; rekord konta, poświadczenie autoryzacyjne, tokeny push i liczniki doręczeń są trzymane w Cloudflare Workers KV i Durable Objects, które Cloudflare może replikować lub uruchamiać poza Europejskim Obszarem Gospodarczym. Jako sieć globalna Cloudflare może też przetwarzać metadane połączeń poza EOG. Te przekazania są objęte zabezpieczeniami wymaganymi przez RODO (np. standardowymi klauzulami umownymi). Dane o awariach przetwarzane przez Sentry mogą być przekazywane poza EOG na tych samych zasadach.</p>
 
     <h2>13. Czego nie zbieramy</h2>
     <ul>

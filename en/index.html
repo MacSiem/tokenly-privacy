@@ -37,7 +37,7 @@
     </ul>
 
     <h2>3. Usage Data</h2>
-    <p>Usage statistics fetched from your AI providers (plan type, limits, consumption, reset times) are processed and cached locally on your device. We have no access to them.</p>
+    <p>Usage statistics fetched from your AI providers (plan type, limits, consumption, reset times, banked usage-limit resets and their expiry) are processed and cached locally on your device. We have no access to them.</p>
 
     <h2>4. Device-to-Device Sync and the Relay</h2>
     <p>If you pair a mobile app with your desktop app, usage data on the same network is synchronized directly between your devices with end-to-end encryption. Pairing keys are stored in the system keychain. We cannot read the synchronized content.</p>
@@ -45,7 +45,7 @@
     <p>What the relay does receive and store: the encrypted snapshot, an opaque randomly-generated account identifier, an opaque device fingerprint, the per-pairing authorization credential (it authenticates this pairing's uploads and reads and cannot decrypt anything), your push notification token (APNs/FCM) if the mobile app registers for sync wake-ups, and ordinary connection metadata such as IP address, sizes and timestamps. Push payloads contain only a generic "new data available" signal — never usage values or credentials. To notice silent delivery failures, the relay also keeps per-account delivery counts (platform, wake-up kind and outcome, such as "accepted by Apple/Google" or "push not configured") and the time a platform last worked. They contain no tokens and no content, are readable only by your paired devices, and are deleted 90 days after their last update.</p>
 
     <h2>5. Crash Diagnostics</h2>
-    <p>Tokenly can use Sentry for crash reporting when a build is configured with a Sentry DSN. Crash diagnostics may include app version, OS version, device model, stack traces, and navigation breadcrumbs. Credentials, tokens, and usage values are not attached to crash reports.</p>
+    <p>Tokenly can use Sentry for crash reporting when a build is configured with a Sentry DSN. Crash diagnostics may include app version, OS version, device model, stack traces, and navigation breadcrumbs; on Apple devices also app-hang and performance diagnostics provided by the system (MetricKit). The apps also send anonymous session start and end events so we can measure how many sessions end without a crash. Credentials, tokens, and usage values are not attached, and no user identifier is set.</p>
 
     <h2>6. Subscriptions and Payments</h2>
     <p>Optional Tokenly Premium is offered as an in-app subscription. On iOS, payment, billing details, and subscription management are handled entirely by Apple through your Apple Account; we do not receive your payment data. See the <a href="terms.html">Terms of Use</a>.</p>
@@ -66,7 +66,7 @@
     <h2>9. Data Retention</h2>
     <ul>
       <li>Credentials and cached usage data remain on your device until you disconnect a provider, delete app data, or uninstall the app.</li>
-      <li>The relay keeps only the latest encrypted snapshot per pairing; each upload replaces the previous one. The snapshot, the authorization credential and the account record remain until you request deletion (see below).</li>
+      <li>The relay keeps only the latest encrypted snapshot per pairing; each upload replaces the previous one. When the desktop has not uploaded for 90 days, the snapshot and the account record are deleted automatically, and the authorization credential within 97 days; you can also request deletion earlier (see below). Cloudflare keeps request logs (IP address, time, the opaque account identifier) for up to 7 days.</li>
       <li>Relay push tokens are refreshed by the platform and expire no later than 180 days after their last successful registration; they are deleted together with the relay record.</li>
       <li>Sentry crash reports are retained for 90 days (Sentry default), then deleted automatically.</li>
     </ul>
@@ -82,7 +82,7 @@
       the address you contact us on and we will have them deleted.</li>
       <li><strong>Relay data (encrypted snapshot, account record, push token):</strong> email
       <a href="mailto:mail@macsiem.dev">mail@macsiem.dev</a> with the opaque account identifier shown in the app
-      and we will delete the server-side record. Turning the relay off in Settings stops any further uploads;
+      and we will delete the server-side record. Without new uploads it is deleted automatically after 90 days. Turning the relay off in Settings stops any further uploads;
       uninstalling alone does not contact the relay.</li>
     </ul>
     <p>To request deletion of anything else, or to exercise any other right, write to
@@ -94,7 +94,7 @@
     <p>Tokenly is not directed at children and we do not knowingly collect personal data from children.</p>
 
     <h2>12. International Transfers</h2>
-    <p>Your credentials never leave your devices through any MacSiem server. When your device queries an AI provider, that traffic goes directly to the provider under its own privacy policy. The encrypted relay runs on Cloudflare Workers with storage located in the European Union; as a global network, Cloudflare may process connection metadata outside the European Economic Area under GDPR safeguards such as Standard Contractual Clauses. Crash data processed by Sentry may be transferred outside the EEA under the same kinds of safeguards.</p>
+    <p>Your credentials never leave your devices through any MacSiem server. When your device queries an AI provider, that traffic goes directly to the provider under its own privacy policy. The encrypted relay runs on Cloudflare Workers. Encrypted snapshots are stored in Cloudflare R2 in Europe; the account record, the authorization credential, push tokens and delivery counts are kept in Cloudflare Workers KV and Durable Objects, which Cloudflare may replicate or run outside the European Economic Area. As a global network, Cloudflare may also process connection metadata outside the EEA. These transfers are covered by GDPR safeguards such as Standard Contractual Clauses. Crash data processed by Sentry may be transferred outside the EEA under the same kinds of safeguards.</p>
 
     <h2>13. What We Do Not Collect</h2>
     <ul>
