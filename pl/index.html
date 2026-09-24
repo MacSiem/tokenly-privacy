@@ -21,7 +21,7 @@
 <body>
   <main class="container">
     <h1>Tokenly — Polityka prywatności</h1>
-    <p class="meta"><strong>Ostatnia aktualizacja:</strong> 9 sierpnia 2026</p>
+    <p class="meta"><strong>Ostatnia aktualizacja:</strong> 24 września 2026</p>
     <p class="lang"><a href="../en/">English version</a> · <a href="terms.html">Warunki korzystania</a></p>
 
     <h2>1. Informacje ogólne</h2>
@@ -42,7 +42,7 @@
     <h2>4. Synchronizacja między urządzeniami i relay</h2>
     <p>Jeśli sparujesz aplikację mobilną z aplikacją desktopową, dane o zużyciu w tej samej sieci są synchronizowane bezpośrednio między Twoimi urządzeniami z szyfrowaniem end-to-end. Klucze parowania są przechowywane w systemowym pęku kluczy. Nie możemy odczytać synchronizowanych treści.</p>
     <p>Aby sparowany telefon działał także poza siecią domową, komputer dodatkowo wysyła zaszyfrowany snapshot do relaya Tokenly (<code>trial.tokenly.macsiem.dev</code>, usługa Cloudflare Workers). Ta synchronizacja poza LAN jest <strong>domyślnie włączona</strong> i można ją wyłączyć w Ustawieniach (tryb tylko-LAN). Snapshot jest szyfrowany AES-GCM kluczem wyprowadzanym z sekretu parowania; ten klucz nigdy nie opuszcza sparowanych urządzeń, więc <strong>relay nie może odszyfrować Twoich danych</strong>.</p>
-    <p>Co relay otrzymuje i przechowuje: zaszyfrowany snapshot, nieprzejrzysty losowo wygenerowany identyfikator konta, nieprzejrzysty odcisk urządzenia, poświadczenie autoryzacyjne danego parowania (uwierzytelnia wysyłki i odczyty tego parowania, nie pozwala niczego odszyfrować), token powiadomień push (APNs/FCM), jeśli aplikacja mobilna rejestruje się po wybudzenia synchronizacji, oraz zwykłe metadane połączenia, takie jak adres IP, rozmiary i znaczniki czasu. Powiadomienia push zawierają wyłącznie ogólny sygnał „są nowe dane" — nigdy wartości zużycia ani danych dostępowych.</p>
+    <p>Co relay otrzymuje i przechowuje: zaszyfrowany snapshot, nieprzejrzysty losowo wygenerowany identyfikator konta, nieprzejrzysty odcisk urządzenia, poświadczenie autoryzacyjne danego parowania (uwierzytelnia wysyłki i odczyty tego parowania, nie pozwala niczego odszyfrować), token powiadomień push (APNs/FCM), jeśli aplikacja mobilna rejestruje się po wybudzenia synchronizacji, oraz zwykłe metadane połączenia, takie jak adres IP, rozmiary i znaczniki czasu. Powiadomienia push zawierają wyłącznie ogólny sygnał „są nowe dane" — nigdy wartości zużycia ani danych dostępowych. Aby wykrywać ciche awarie doręczeń, relay przechowuje też liczniki doręczeń dla konta (platforma, rodzaj wybudzenia i wynik, np. „przyjęte przez Apple/Google” albo „push nieskonfigurowany”) oraz czas ostatniego udanego doręczenia na daną platformę. Nie zawierają tokenów ani treści, odczytać je mogą tylko sparowane urządzenia i są usuwane 90 dni po ostatniej aktualizacji.</p>
 
     <h2>5. Diagnostyka awarii</h2>
     <p>Tokenly może korzystać z Sentry do raportowania awarii, gdy dana kompilacja jest skonfigurowana z Sentry DSN. Diagnostyka może obejmować wersję aplikacji, wersję systemu, model urządzenia, stack trace i breadcrumbs nawigacji. Dane dostępowe, tokeny ani wartości zużycia nie są dołączane do raportów.</p>
